@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=mydb
+            - POSTGRES_USER=myuser
+            - POSTGRES_PASSWORD=mypassword
+    web:
+        build: .
+        command: python manage.py runserver 0:8000
+        volumes:
+            - .:/mysite
+        ports:
+            - 8000:8000
+        depends_on:
+            - db
+            - redis
+    redis:
+        image: redis
+        depends_on:
+            - db
